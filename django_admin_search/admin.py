@@ -22,7 +22,12 @@ class AdvancedSearchAdmin(ModelAdmin):
         """
         queryset = super().get_queryset(request)
         try:
-            return queryset.filter(self.advanced_search_query(request))
+            result_queryset = queryset.filter(self.advanced_search_query(request))
+            if not result_queryset.exists():
+                messages.add_message(request, messages.INFO, 'No match Found')
+                return queryset
+            else:
+                return result_queryset
         except Exception:
             messages.add_message(request, messages.ERROR, 'Filter not applied, error has occurred')
             return queryset.none()
