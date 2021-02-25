@@ -3,7 +3,7 @@
 
 <!-- Stylesheet connection -->
 {% block stylesheet %}
-<link rel="stylesheet" href="{% static 'css/styles.css' %}"> 
+<link rel="stylesheet" href="{% static 'django_admin_search/css/styles.css' %}">
 {% endblock %}
 
 {% block modal %}
@@ -57,17 +57,24 @@
 <!-- Scripts -->
 {% block scripts %}
     <!-- jQuery -->
-    <script src="{% static 'jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'django_admin_search/jquery/jquery.min.js' %}"></script>
 
     <!-- JQuery Mask-->
-    <script src="{% static 'jquery_mask/jquerymask.js' %}"></script>
+    <script src="{% static 'django_admin_search/jquery_mask/jquerymask.min.js' %}"></script>
 
     <!-- jQuery Modal -->
-    <script src="{% static 'jquery_modal/jquery.modal.min.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'jquery_modal/jquery.modal.min.css' %}" />
+    <script src="{% static 'django_admin_search/jquery_modal/jquery.modal.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'django_admin_search/jquery_modal/jquery.modal.min.css' %}" />
 
     <!-- Submit Button (Get parameters)-->
     <script>
+        let array = window.location.search.substring(1).split("&");
+        for (let i = 0; i < array.length; i++) {
+            [key, value] = array[i].split("=")
+            if (key !== 'o'&& key !== 'q' && value != null && !key.includes("__")){
+                 document.getElementById("id_" + key).value = decodeURIComponent(value);
+            }
+        }
         let searchParams = new URLSearchParams(window.location.search)
         
         page = searchParams.get('p')
